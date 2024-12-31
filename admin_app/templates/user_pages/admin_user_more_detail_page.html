@@ -1,0 +1,155 @@
+{% extends 'layouts/admin_main_layout.html' %}
+
+{% block title %} Detailed List {% endblock %}
+
+{% block style %}
+
+    <style>
+      body {
+        background-color: #ddeef5;
+        height: 100vh;
+      }
+
+    </style>
+ {% endblock %}
+
+ {% block content %}
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 my-3 mx-auto">
+          <h1 class="text-center text-dark">More Details</h1>
+        </div>
+      </div>
+      <div class="row">
+
+        <!--Subscription Details-->
+
+        <div class="col-12 col-sm-12 col-md-6">
+          <div class="table-responsive">
+            <table class="table table-hover table-bordered table-light">
+              <thead>
+                <tr class="text-center h4">
+                    <th class="text-primary" colspan="2" style="background-color: antiquewhite;">SUBSCRIPTION DETAILS</th>
+                </tr>
+                <tr class="text-center h4" style="background-color: rgb(210, 210, 210);">
+                  <th>Plans</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% if user_subscription_page_obj %}
+                {% for data in user_subscription_page_obj %}
+                <tr class="text-center">
+                  <td class="h6">{{data.subscription_plan.plan_name}}</td>
+                  <td>{{data.date_of_taken|date:"d-m-Y"}}</td>
+                </tr>
+                {% endfor %}
+                  {% else %}
+                  <tr class="text-center">
+                    <td colspan="2" class="h6">No subscriptions for this user.</td>  
+                  </tr>
+              {% endif %}
+              </tbody>
+            </table>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <nav aria-label="Page navigation example" style="margin:auto;" >
+                <ul class="pagination pagination-sm justify-content-center">
+                {% if user_subscription_page_obj.has_previous %}
+                
+                <li class="page-item"><a href="?page=1" class="page-link">&laquo; first</a></li>
+                <li class="page-item"><a href="?page={{ user_subscription_page_obj.previous_page_number }}" class="page-link" aria-label="previous">&laquo; previous</a></li>
+                {% endif %}
+                
+                {% for page_number in user_subscription_page_obj.paginator.get_elided_page_range %}
+                {% if user_subscription_page_obj.number == page_number %}
+                <li class="page-item"><span class="page-link">{{ page_number }}</span></li>
+                {% else %}
+                <li class="page-item"><a href="?page={{ page_number }}" class="page-link">{{ page_number }}</a></li>
+                {% endif %}
+                {% endfor %}
+                
+                {% if user_subscription_page_obj.has_next %}
+                <li class="page-item"><a href="?page={{ user_subscription_page_obj.next_page_number }}" class="page-link">next &raquo;</a></li>
+                <li class="page-item"><a href="?page={{ user_subscription_page_obj.paginator.num_pages }}" class="page-link">last &raquo;</a></li>
+                
+                {% endif %}
+                </ul>
+                </nav>            
+            </div>
+          </div>
+        </div>
+
+        <!--History Details-->
+
+        <div class="col-12 col-sm-12 col-md-6">
+            <div class="table-responsive">
+              <table class="table table-hover table-bordered table-light">
+                <thead>
+                  <tr class="text-center h4">
+                      <th class="text-danger" colspan="2" style="background-color: antiquewhite;">HISTORY DETAILS</th>
+                  </tr>
+                  <tr class="text-center h4" style="background-color: rgb(210, 210, 210);">
+                    <th>Movie Title</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% if user_watch_history_data %}
+                  {% for data in user_watch_history_data %}
+                    <tr class="text-center">
+                      <td class="h6">{{data.movie}}</td>
+                      <td>{{data.added_at|date:"d-m-Y"}}</td> <!--Date filter refer Django Filter Documentation-->
+                    </tr>
+                  {% endfor %}
+                  {% else %}
+                  <tr class="text-center">
+                    <td colspan="2" class="h6">No Watch History for this user.</td>  
+                  </tr>
+                {% endif %}
+                </tbody>
+              </table>
+            </div>
+             <!--user watch history Pagination-->
+
+      <div class="row">
+        <div class="col">
+          <nav aria-label="Page navigation example" style="margin:auto;" >
+            <ul class="pagination pagination-sm justify-content-center">
+            {% if user_watch_history_data.has_previous %}
+            
+            <li class="page-item"><a href="?page=1" class="page-link">&laquo; first</a></li>
+            <li class="page-item"><a href="?page={{ user_watch_history_data.previous_page_number }}" class="page-link" aria-label="previous">&laquo; previous</a></li>
+            {% endif %}
+            
+            {% for page_number in user_watch_history_data.paginator.get_elided_page_range %}
+            {% if user_watch_history_data.number == page_number %}
+            <li class="page-item"><span class="page-link">{{ page_number }}</span></li>
+            {% else %}
+            <li class="page-item"><a href="?page={{ page_number }}" class="page-link">{{ page_number }}</a></li>
+            {% endif %}
+            {% endfor %}
+            
+            {% if user_watch_history_data.has_next %}
+            <li class="page-item"><a href="?page={{ user_watch_history_data.next_page_number }}" class="page-link">next &raquo;</a></li>
+            <li class="page-item"><a href="?page={{ user_watch_history_data.paginator.num_pages }}" class="page-link">last &raquo;</a></li>
+            
+            {% endif %}
+            </ul>
+            </nav>            
+        </div>
+      </div>
+    </div>
+         <!--user watch history Pagination ends-->
+
+          </div>
+
+          <!--History Details ends -->
+        <div class="col text-center mt-3">
+          <a href="{% url 'get_all_users' %}" class="btn btn-danger btn-sm" style="border-radius: 15px;">Back to list</a>
+        </div>
+      </div>
+    </div>
+{% endblock %}

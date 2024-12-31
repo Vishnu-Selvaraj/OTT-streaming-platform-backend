@@ -1,0 +1,57 @@
+{% extends 'layouts/admin_main_layout.html'%}
+
+    {% block title %}
+    Login
+    {% endblock %}
+
+    {% block style %}
+    <style>
+        body{
+            background-image: linear-gradient(to right top, #0b1763, #283080, #414b9e, #5968bc, #7185db);
+            height: 100vh;
+        }
+
+        #card{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+        }
+
+        #loginBtn{
+            background-color: #283080;
+            border-radius: 50px;
+        }
+    </style>
+
+    {% endblock %}
+
+    {% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-sm-10 col-md-8 mx-auto" id="card">
+                <div class="card py-3">
+                    <div class="card-body">
+                        <h1 class="card-title text-center font-weight-bold" style="color: #283080;">Login</h1>
+                        <!-- {% if error %}
+                        <div class="alert alert-danger fade show text-center">{{error}}</div>
+                        {% endif %} -->
+
+                        {% include 'partials/alert.html' %}
+
+                        <form class="form-group" method="post">
+                            {% csrf_token %}
+                            <label for="email">Email:</label>
+                                <input type="email" class="form-control mb-4" name="email" id="email" placeholder="Enter your email">
+                            <label for="password">Password:</label>
+                                <input type="password" class="form-control mb-4" name="password" id="password" placeholder="Enter your password">
+                                <button id="loginBtn" class="btn btn-block text-white">Login</button>
+                        </form>
+                        <a href="{% url 'forgot-password-request' %}" class="card-link d-flex justify-content-center">Forgot password?</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends 'layouts/admin_main_layout.html' %}
+
+{% block title %} Plan List {% endblock %}
+
+{% block style %}
+    <style>
+        
+      body {
+        background-image: linear-gradient(to left top, #316879, #398190, #429aa7, #4eb4bc, #5dcfcf, #6fdad8, #80e4e1, #90efea, #a1eceb, #b1e8ea, #c1e5e7, #cfe1e3);
+        height: 100vh;
+      }
+
+      #create-btn{
+        opacity: 0.94;
+      }
+
+      #create-btn:hover{
+        opacity: 1;
+      }
+
+    </style>
+{% endblock %}
+
+{% block content %}
+
+{% include 'partials/admin_navbar.html' %}
+{% include 'partials/alert.html' %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="card mt-5">
+                    <div class="card-body bg-light">
+                        <div class="row">
+                            <div class="col-12 my-3 mx-auto">
+                                <h1 class="text-center" style="color:#398190 ;">Plan List</h1>
+                              </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-4 offset-1">
+                                <a href="{% url 'add_subscription_plans' %}" class="btn btn-primary" id="create-btn" style="padding: 5px 20px; background-color:#316879; border-radius: 50px; border: none;">Add plans</a>
+                            </div>
+                            <div class="col-6">
+                                <form class="form-inline" style="display: flex;justify-content:end;">
+                                    <input
+                                        type="text"
+                                        class="form-control form-control-sm col-6 col-sm-7 col-md-6"
+                                        placeholder="Enter the plan name"
+                                        name="search_name"
+                                    />
+                                   {% if is_clicked_searchBtn %}
+                                     <button type="submit" class="btn btn-outline-danger btn-sm ml-2 " style="border-radius: 15px; padding: 4px 15px;">Reset</button>
+                                   {% else %}
+                                    <button type="submit" class="btn btn-outline-primary btn-sm ml-2 " style="border-radius: 15px;;padding: 4px 10px;">Search</button>
+                                   {% endif %}
+                                </form>
+                            </div>
+                        </div>
+                      <div class="row">
+                        <div class="col-10 mx-auto">
+                          <div class="table-responsive">
+                            <table class="table table-hover table-bordered table-white">
+                              <thead>
+                                <tr class="text-center h4">
+                                  <th>Plan Name</th>
+                                  <th colspan="2">Actions</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% if subscription_plans_page_obj %}
+                                  {% for plans in subscription_plans_page_obj %}
+                                    <tr class="text-center">
+                                      <td class="h6">{{plans.plan_name}}</td>
+
+                                      {% if plans.is_enabled %}
+                                        <td><a href="{% url 'plan_enable_or_disable' plans.id %}" class="btn btn-outline-danger btn-sm" style="border-radius: 10px;">Disable</a></td>
+                                      {% else %}
+                                        <td><a href="{% url 'plan_enable_or_disable' plans.id %}" class="btn btn-outline-primary btn-sm" style="border-radius: 10px;">Enable</a></td>
+                                      {% endif %}
+
+                                      <td><a href="{% url 'view_plan' plans.id %}" class="btn btn-outline-success btn-sm" style="border-radius: 10px; padding: 5px 15px ;">View</a></td>
+                                    </tr>
+                                  {% endfor %}
+                                  {% else %}
+                                  <tr class="text-center">
+                                    <td colspan="3" class="h5 text-danger">No subscription plans Found</td>
+                                  </tr>
+                                {% endif %}
+                              </tbody>
+                            </table>
+                          </div>
+                      </div>
+                    </div>
+                </div>
+
+                  <!--Pagination-->
+
+                  <div class="row">
+                    <div class="col">
+                      <nav aria-label="Page navigation example" style="margin:auto;" >
+                        <ul class="pagination pagination-sm justify-content-center">
+                        {% if subscription_plans_page_obj.has_previous %}
+                        
+                        <li class="page-item"><a href="?page=1" class="page-link">&laquo; first</a></li>
+                        <li class="page-item"><a href="?page={{ subscription_plans_page_obj.previous_page_number }}" class="page-link" aria-label="previous">&laquo; previous</a></li>
+                        {% endif %}
+                        
+                        {% for page_number in subscription_plans_page_obj.paginator.get_elided_page_range %}
+                        {% if subscription_plans_page_obj.number == page_number %}
+                        <li class="page-item"><span class="page-link">{{ page_number }}</span></li>
+                        {% else %}
+                        <li class="page-item"><a href="?page={{ page_number }}" class="page-link">{{ page_number }}</a></li>
+                        {% endif %}
+                        {% endfor %}
+                        
+                        {% if subscription_plans_page_obj.has_next %}
+                        <li class="page-item"><a href="?page={{ subscription_plans_page_obj.next_page_number }}" class="page-link">next &raquo;</a></li>
+                        <li class="page-item"><a href="?page={{ subscription_plans_page_obj.paginator.num_pages }}" class="page-link">last &raquo;</a></li>
+                        
+                        {% endif %}
+                        </ul>
+                        </nav>            
+                    </div>
+                  </div>
+                </div>
+                <!--Pagination end-->
+            </div>
+        </div>
+    </div>
+{% endblock %}

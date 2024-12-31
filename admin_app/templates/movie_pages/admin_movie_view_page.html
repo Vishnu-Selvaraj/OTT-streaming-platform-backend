@@ -1,0 +1,74 @@
+{% extends 'layouts/admin_main_layout.html' %}
+
+{% block title %} movie view page {% endblock %}
+
+  
+{% block style %}
+    <style>
+      body {
+        background-image: linear-gradient(
+          to right top,
+          #162452,
+          #105272,
+          #4a7e87,
+          #8da8a0,
+          #cdd2cb
+        );
+        height: 100vh;
+      }
+
+      #back-btn{
+        opacity: 0.9;
+      }
+
+      #back-btn:hover{
+        opacity: 1;
+      }
+
+
+      #card{
+        height:auto;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+      }
+
+    </style>
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+      <div class="row" >
+        <div class="col-12 col-sm-10" id="card">
+          {% include 'partials/alert.html' %}
+          <div class="card">
+            <div class="card-body">   
+              <h1 class="card-title text-center" style="color:#105272">{{movie.title}}</h1>
+              <p class="card-text text-justify">
+                {{movie.description}}
+              </p>
+
+              <div class="row" >
+                <div class="col-6 col-sm-6 col-md-6"style="display: flex; justify-content: start;">
+                    <img class="card-img img-thumbnail mt-2" src="/media/{{movie.thumbnail}}" alt="{{movie.title}}" style="height: 98%;">
+                </div>
+                <div class="col-6 col-sm-6 col-md-6 mt-2" style="display: flex; justify-content: end;">
+                    <video class="card-img" controls style="height: 100%;">
+                      <source src="/media/{{movie.video}}" type="video/mp4">
+                    </video>
+                </div>
+              </div>
+
+              <div class="d-flex justify-content-center">
+                <a href="{% url 'get_all_movies' %}" class="btn btn-sm text-white my-4" id="back-btn" style="background-color: #4a7e87; border: none;">Back to list</a>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}

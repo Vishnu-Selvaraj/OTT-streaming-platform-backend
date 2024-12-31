@@ -1,0 +1,156 @@
+{% extends 'layouts/admin_main_layout.html' %}
+
+{% block title %} movie List {% endblock %}
+
+   
+{% block style %}
+    <style>
+        
+      body {
+        background-image: linear-gradient(
+          to right top,
+          #6c7ae0,
+          #9899e8,
+          #bdb9f0,
+          #dfdcf7,
+          #ffffff
+        );
+        height: 100vh;
+      }
+
+      #create-btn{
+        opacity: 0.9;
+      }
+
+      #create-btn:hover{
+        opacity: 1;
+      }
+
+      </style>
+
+{% endblock %}
+
+{% block content %}
+
+{% include 'partials/admin_navbar.html' %}
+
+<div class="container">
+        <div class="row">
+            <div class="col-12 my-3 mx-auto">
+                <h1 class="text-center text-secondary" id="heading">Movie List</h1>
+              </div>
+              <div class="col">
+                {% include 'partials/alert.html' %}
+              </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-5 offset-1">
+                <a href="{% url 'create_movie' %}" class="btn btn-primary" id="create-btn" style="padding: 5px 40px; background-color: #6C7AE0; border-radius: 50px; border: none;">Create</a>
+            </div>
+            <div class="col-5">
+                <form id="search-form" class="form-inline" style="display: flex;justify-content:end;">
+                    <input
+                        id="search-input"
+                        type="text"
+                        class="form-control form-control-sm col-7 col-sm-6 col-md-6"
+                        placeholder="Enter the movie name"
+                        name="searchTerm"
+                        value="{{searchTerm}}"
+                    />
+                    <!--Show the button if a term searched it will be true so reset btn showned else search btn showned-->
+                    {% if is_clicked_searchBtn %}
+                    <button type="submit" class="btn btn-danger btn-sm ml-2 " style="border-radius: 15px;padding: 4px 15px;">Reset</button>
+                    {% else %}
+                    <button type="submit" class="btn btn-primary btn-sm ml-2 " style="border-radius: 15px;padding: 4px 10px;">Search</button>
+                    {% endif %}
+                  </form>
+            </div>
+        </div>
+      <div class="row">
+        <div class="col-10 mx-auto">
+          <div class="table-responsive">
+            <table class="table table-hover table-bordered table-light">
+              <thead id="thead">
+              {% if movie_data %}
+                <tr class="text-center h4">
+                  <th>Title</th>
+                  <th colspan="3">Actions</th>
+                </tr>
+              {% else %}
+                <tr class="text-center h4">
+                  <th>Title</th>
+                  <th>Actions</th>
+                </tr>
+              {% endif %}
+              </thead>
+              <tbody id="table-body">
+              {% if movie_data %}
+                {% for movie in movie_data %}
+                <tr class="text-center">
+                  <td class="h6">{{movie.title}}</td>
+                  <td><a href="{% url 'view_movie' movie.id %}">View</a></td>
+                  <td><a href="{% url 'update_movie' movie.id %}">Edit</a></td>
+                  <td><a href="#" data-target = '#deleteModal{{movie.id}}' data-toggle="modal">Delete</a></td>
+                </tr>
+                <!--Here the 'deleteModal' added with id so each movie uniquely identified-->
+                <div class="modal fade" id="deleteModal{{movie.id}}">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      
+                      <div class="modal-body text-center">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title text-danger mt-4">Are you sure want to delete?</h4>
+                        <h4 class="my-4">Movie title: {{movie.title}}</h4>
+                        <div class="mb-4 text-center">
+                          <a href="{% url 'delete_movie' movie.id %}" class="btn btn-success  mr-3" style="border-radius:20px; padding: 4px 15px;">Confirm</a>
+                          <button class="btn btn-danger"  class="close" data-dismiss="modal" style="border-radius:20px; padding: 4px 15px;">Cancel</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <tr class="text-center">
+                  <td colspan="2" class="h5 text-danger">No Movie data Found</td>
+                </tr>
+              {% endif %}
+              </tbody>
+            </table>
+          </div>
+          
+        </div>
+      </div>
+
+      <!--Pagination-->
+
+      <div class="row">
+        <div class="col">
+          <nav aria-label="Page navigation example" style="margin:auto;" >
+            <ul class="pagination pagination-sm justify-content-center">
+            {% if movie_data.has_previous %}
+            
+            <li class="page-item"><a href="?page=1" class="page-link">&laquo; first</a></li>
+            <li class="page-item"><a href="?page={{ movie_data.previous_page_number }}" class="page-link" aria-label="previous">&laquo; previous</a></li>
+            {% endif %}
+            
+            {% for page_number in movie_data.paginator.get_elided_page_range %}
+            {% if movie_data.number == page_number %}
+            <li class="page-item"><span class="page-link">{{ page_number }}</span></li>
+            {% else %}
+            <li class="page-item"><a href="?page={{ page_number }}" class="page-link">{{ page_number }}</a></li>
+            {% endif %}
+            {% endfor %}
+            
+            {% if movie_data.has_next %}
+            <li class="page-item"><a href="?page={{ movie_data.next_page_number }}" class="page-link">next &raquo;</a></li>
+            <li class="page-item"><a href="?page={{ movie_data.paginator.num_pages }}" class="page-link">last &raquo;</a></li>
+            
+            {% endif %}
+            </ul>
+            </nav>            
+        </div>
+      </div>
+    </div>
+
+{% endblock %}

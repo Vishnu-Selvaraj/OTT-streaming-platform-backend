@@ -1,0 +1,156 @@
+{% extends 'layouts/admin_main_layout.html' %} 
+{% block title %} view Count {%endblock %} 
+
+{% block style %}
+<style>
+  body {
+    background-image: linear-gradient(
+      to right bottom,
+      #8aaae5,
+      #afbdeb,
+      #cdd2f1,
+      #e8e8f8,
+      #ffffff
+    );
+    height: 100vh;
+  }
+</style>
+{% endblock %}
+
+{% block content %} 
+{% include 'partials/admin_navbar.html' %}
+
+<div class="container">
+  <div class="row">
+    <div class="col mt-5">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12 my-3 mx-auto">
+              <h1 class="text-center" style="color: #8aaae5">VIEW COUNT</h1>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-11 col-sm-11">
+              <form
+                class="form-inline ml-2 pl-2"
+                style="display: flex; justify-content: end"
+              >
+                <input
+                  type="text"
+                  class="form-control form-control-sm my-2 my-sm-0 col-9 col-md-5"
+                  placeholder="Enter the movie name"
+                  id="search-input"
+                  name="searchTerm"
+                />
+
+                {% if is_clicked_searchBtn %}
+                <button
+                  type="submit"
+                  class="btn btn-outline-danger btn-sm ml-2"
+                  style="border-radius: 15px; padding: 4px 13px"
+                >
+                  Reset
+                </button>
+                {% else %}
+                <button
+                  type="submit"
+                  class="btn btn-outline-primary btn-sm ml-2"
+                  style="border-radius: 15px; padding: 4px 10px"
+                >
+                  Search
+                </button>
+
+                {% endif %}
+
+              </form>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-10 mx-auto">
+              <div class="table-responsive">
+                <table class="table table-hover table-bordered table-white">
+                  <thead>
+                    <tr
+                      class="text-center h4 text-light"
+                      style="background-color: #afbdeb"
+                    >
+                      <th>Movie Name</th>
+                      <th>No.of Views</th>
+                    </tr>
+                  </thead>
+                  <tbody id="table-body">
+                    {% if movie_view_count_data %} 
+                    {% for movie in movie_view_count_data %}
+                    <tr class="text-center">
+                      <td class="h6">{{movie.title}}</td>
+                      <td>{{movie.view_count}}</td>
+                    </tr>
+                    {% endfor %} 
+                    {% endif %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="row">
+          <div class="col">
+            <nav aria-label="Page navigation example" style="margin: auto">
+              <ul class="pagination pagination-sm justify-content-center">
+                {% if movie_view_count_data.has_previous %}
+
+                <li class="page-item">
+                  <a href="?page=1" class="page-link">&laquo; first</a>
+                </li>
+                <li class="page-item">
+                  <a
+                    href="?page={{ movie_view_count_data.previous_page_number }}"
+                    class="page-link"
+                    aria-label="previous"
+                    >&laquo; previous</a
+                  >
+                </li>
+                {% endif %} 
+                {% for page_number in movie_view_count_data.paginator.get_elided_page_range %} 
+                {% if movie_view_count_data.number == page_number %}
+                <li class="page-item">
+                  <span class="page-link">{{ page_number }}</span>
+                </li>
+                {% else %}
+                <li class="page-item">
+                  <a href="?page={{ page_number }}" class="page-link"
+                    >{{ page_number }}</a
+                  >
+                </li>
+                {% endif %}
+                {% endfor %} 
+                {% if movie_view_count_data.has_next %}
+                <li class="page-item">
+                  <a
+                    href="?page={{ movie_view_count_data.next_page_number }}"
+                    class="page-link"
+                    >next &raquo;</a
+                  >
+                </li>
+                <li class="page-item">
+                  <a
+                    href="?page={{ movie_view_count_data.paginator.num_pages }}"
+                    class="page-link"
+                    >last &raquo;</a
+                  >
+                </li>
+
+                {% endif %}
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

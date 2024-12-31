@@ -1,0 +1,72 @@
+{% extends 'layouts/admin_main_layout.html' %}
+    
+{% block title %} Add movies {% endblock %}
+
+{% block style %}
+    <style>
+        body {
+        background-image: linear-gradient(
+          to right top,
+          #6c7ae0,
+          #9899e8,
+          #bdb9f0,
+          #dfdcf7,
+          #ffffff
+        );
+        height: 100vh;
+      }
+
+        #card{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+        }
+
+        #add-btn:hover{
+            opacity: 0.9;
+        }
+
+        #backBtn{
+            padding: 5px 70px;
+        }
+
+
+    </style>
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-sm-10 col-md-8 mx-auto" id="card">
+                <div class="card py-3">
+                    <div class="card-body">
+                        <h1 class="card-title text-center font-weight-bold" style="color: #7d78ea;">ADD MOVIES</h1>
+                        {% include 'partials/alert.html' %}
+                        <form class="form-group" method="post" enctype="multipart/form-data" >
+                            {% csrf_token %}
+                            <label for="title">Title:</label>
+                                <input type="text" class="form-control mb-4" name="title" id="title" placeholder="Enter movie title">
+                            <label for="description">Description:</label>
+                                <textarea class="form-control mb-4" rows="3" name="description" id="description" placeholder="Enter description.Please limit it to 185 characters."></textarea>
+                            <label for="rating">Rating:</label>
+                                <input type="number" class="form-control col-6 mb-4" name="rating" id="rating" max="5" min="1" step="0.1" placeholder="Enter movie rating between 1 to 5">
+                            <label for="thumbnail">Thumbnail:</label>
+                                <input type="file" class="ml-2 pl-1 mb-4" name="thumbnail" id="thumbnail"><br>
+                            <label for="video">Video:</label>
+                                <input type="file" class="ml-5 mb-4" name="video" id="video"><br>
+
+                                <div class="text-center" id="btn-group">
+                                    <button type="submit" id="add-btn" class="btn text-white mx-3" style="background-color: #7d78ea;padding: 5px 50px;  border-radius: 50px;">Add</button>
+                                    <a href="{% url 'get_all_movies' %}" class="btn btn-danger text-white mx-3" style="padding: 5px 40px; border-radius: 50px;">Cancel</a>
+                                </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

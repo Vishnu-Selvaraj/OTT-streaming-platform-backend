@@ -1,0 +1,123 @@
+<style>
+  .dropdown-menu {
+    left: auto; /* Reset the left position */
+    right: 0; /* Align to the right */
+  }
+
+  .dropdown-menu .dropdown-item{
+    transition: background 0.4s ,color 0.4s;
+  }
+  .dropdown-menu .dropdown-item:hover{
+    background: rgba(84, 203, 239, 0.8);
+    color: #fff;
+  }
+
+  .navbar-brand {
+    color: #111;
+  }
+  .nav-link{
+    color: #111;
+    transition:color 0.5s;
+  }
+
+  .nav-link:hover{
+    color:#54cbef;
+    text-shadow: 0px 0px 0.5px #1f38f5;
+    
+  }
+
+  /* #54cbef */
+</style>
+
+<nav class="navbar navbar-light navbar-expand-lg" style="background-color: rgba(255, 255, 255, 0.85);" > <!--style="background-color: rgba(255, 255, 255, 0.85);"-->
+  <a class="navbar-brand font-weight-bold" href="#">OTT platform</a>
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbarNavDropdown"
+    aria-controls="navbarNavDropdown"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+    <span class="navbar-toggler-icon "></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'get_all_movies' %}"
+          >Home <span class="sr-only">(current)</span></a
+        >
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'get_all_users' %}">User List</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'get_all_plans' %}"
+          >Plan List</a 
+        >
+      </li>
+      <li class="nav-item dropdown">
+        <a
+          class="nav-link dropdown-toggle"
+          href="#"
+          id="reportsdropdown"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          Reports
+        </a>
+        <div class="dropdown-menu" aria-labelledby="reportsdropdown">
+          <!-- <a class="dropdown-item" href="admin_revenue_report_page.html"
+            >Revenue</a
+          >
+          <a
+            class="dropdown-item"
+            href="admin_total_subscription_purchase_page.html"
+            >Subscriptions purchased</a
+          > -->
+          <a class="dropdown-item" href="{% url 'view_count' %}"
+            >View Count</a
+          >
+          <!-- <a class="dropdown-item" href="admin_cumulative_rating_page.html"
+            >Rating</a
+          > -->
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a
+          class="nav-link dropdown-toggle"
+          href="#"
+          id="navbarDropdownMenuLink"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          Accounts
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="{% url 'admin_change_password' %}"
+            >Change Password</a
+          >
+          <a class="dropdown-item" href="#logoutModal" data-toggle="modal">Logout</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="modal fade" id="logoutModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body text-center">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <p class="mx-3 mt-5 mb-4 lead text-center"><b>"<span class="text-danger">{{user.name}}</span>"</b>&nbsp;Are sure you want to logout ?</p>
+        <div class="mb-4 text-center">
+          <a href="{% url 'admin_logout_page' %}" class="btn btn-success  mr-3" style="border-radius:20px; padding: 4px 15px;">Confirm</a>
+          <button class="btn btn-danger"  class="close" data-dismiss="modal" style="border-radius:20px; padding: 4px 15px;">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
